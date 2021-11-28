@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import FastAPI
 from numpy.random.mtrand import random
 from sqlalchemy import create_engine
-from model import Vasicek
+from model import Vasicek, CIR
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
 from random import randrange
@@ -44,8 +44,23 @@ class VasicekConfig(BaseModel):
 def get_vasicek_scen(config: VasicekConfig):
   vas = Vasicek()
   vas.set_param(config.dt, config.a, config.b, config.sigma)
-  # scen = vas.gen_scen(config.r0, config.n, config.t)
-  scen = vas.gen_scen(config.r0, config.n, config.t, random_state=randrange(100))
-  # result = {i+1: list(scen[:, i]) for i in range(scen.shape[1])}
+  scen = vas.gen_scen(config.r0, config.n, config.t)
+  result = [list(scen[:, i]) for i in range(scen.shape[1])]
+  return JSONResponse(result)
+
+class CIRConfig(BaseModel):
+  dt: float
+  a: float
+  b: float
+  sigma: float
+  r0: float
+  t: float
+  n: int
+
+@app.post('/model/cir/scen')
+def get_vasicek_scen(config: CIRConfig):
+  cir = CIR()
+  cir.set_param(config.dt, config.a, config.b, config.sigma)
+  scen = cir.gen_scen(config.r0, config.n, config.t)
   result = [list(scen[:, i]) for i in range(scen.shape[1])]
   return JSONResponse(result)
