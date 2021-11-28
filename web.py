@@ -70,7 +70,7 @@ if selected_model == 'CIR':
   if submitted:
     scen_df = pd.DataFrame(scen)
     now = datetime.now().strftime('%Y%m%d%H%M%S')
-    download_btn = st.download_button('시나리오 다운', data=scen_df.to_csv(index=False, header=False),
+    download_btn = st.download_button('Download', data=scen_df.to_csv(index=False, header=False),
       file_name=f'cir_scen_{now}.csv', mime='text/csv')
 
 elif selected_model == 'Vasicek':
@@ -127,5 +127,5 @@ elif selected_model == 'Vasicek':
   if submitted:
     scen_df = pd.DataFrame(scen)
     now = datetime.now().strftime('%Y%m%d%H%M%S')
-    download_btn = st.download_button('Download', data=scen_df.to_csv(index=False, header=False),
+    download_btn = st.download_button('시나리오 다운', data=scen_df.to_csv(index=False, header=False),
       file_name=f'vasicek_scen_{now}.csv', mime='text/csv')
